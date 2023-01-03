@@ -1,0 +1,21 @@
+version: '3'
+
+
+services:
+
+  db:
+    container_name: db
+    network_mode: host
+    shm_size: 2g
+    image: postgres:14.3
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+  wkhtmltopdf:
+    container_name: wkhtmltopdf
+    restart: always
+    image: openlabs/docker-wkhtmltopdf-aas
+    ports:
+      - 5000:80
