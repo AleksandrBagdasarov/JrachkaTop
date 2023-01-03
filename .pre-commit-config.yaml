@@ -11,8 +11,7 @@ repos:
     -   id: black
 -   repo: local
     hooks:
-        - id: my-precommit
-          name: my-precommit
-          entry: python3 precommit.py
-          language: python
-          pass_filenames: false
+      - id: my-precommit
+        name: my-precommit
+        entry: python3 precommit.py
+        language: python
