@@ -13,6 +13,13 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
+  redis:
+    container_name: redis
+    network_mode: host
+    restart: always
+    image: redis:6.2-alpine
+    command: redis-server --loglevel warning --requirepass ${REDIS_REQUIREPASS}
+
   wkhtmltopdf:
     container_name: wkhtmltopdf
     restart: always

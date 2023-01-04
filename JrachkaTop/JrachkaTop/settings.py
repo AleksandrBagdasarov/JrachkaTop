@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
-import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +20,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # .env
 POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "postgres")
+REDIS_REQUIREPASS = os.getenv("REDIS_REQUIREPASS", "redis")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-5t0nt8-2&8q4@dawumwmxoq9e=o$f7^x$%&fu9)0ns2g#zcfof"
+SECRET_KEY = (
+    "django-insecure-5t0nt8-2&8q4@dawumwmxoq9e=o$f7^x$%&fu9)0ns2g#zcfof"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -46,8 +49,6 @@ LOGGING = {
         "level": "DEBUG",
     },
 }
-#
-# LOGGER = logging.getLogger("root")
 
 ALLOWED_HOSTS = []
 
@@ -63,6 +64,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "api",
     "drf_yasg",
+    "rest_framework",
     "django_apscheduler",
 ]
 
@@ -153,7 +155,12 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Rest Framework settings
-# from rest_framework.settings import api_settings
+
+AUTH_USER_MODEL = "api.user"
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
@@ -161,4 +168,13 @@ REST_FRAMEWORK = {
     "DEFAULT_PARSER_CLASSES": [
         "rest_framework.parsers.JSONParser",
     ],
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
+
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"},
+    }
 }
