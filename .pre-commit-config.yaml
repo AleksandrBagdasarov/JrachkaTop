@@ -11,7 +11,7 @@ repos:
     -   id: black
 -   repo: local
     hooks:
-      - id: my-precommit
-        name: my-precommit
-        entry: python3 precommit.py
-        language: python
+      - id: pip-freeze
+        name: pip-freeze
+        entry: bash -c 'pip3 freeze > requirements.txt'
+        language: system
