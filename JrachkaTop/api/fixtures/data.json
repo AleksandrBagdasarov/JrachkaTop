@@ -1,0 +1,11 @@
+[
+  {
+    "model": "api.printer",
+    "pk": "571d17e3-e146-4164-8416-4f251ae2f758",
+    "fields": {
+      "api_key": "",
+      "check_type": "",
+      "point_id": ""
+    }
+  }
+]
