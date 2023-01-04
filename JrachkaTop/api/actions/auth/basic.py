@@ -1,10 +1,9 @@
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics, response, status
-from rest_framework_simplejwt.tokens import RefreshToken
-
 from api.actions.auth.serializers import (UserAuthResponseSerializer,
                                           UserBasicAuthSerializer)
 from api.models.user import User
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import generics, response, status
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class UserBasicAuthView(generics.GenericAPIView):
