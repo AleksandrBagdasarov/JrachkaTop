@@ -22,3 +22,9 @@
 ####
 Підключив сваггер, він доступний тут:
 [/api/v1/swagger/](http://127.0.0.1:8000/api/v1/swagger/)
+####
+Щоб авторизуватися в свагері треба додати `Bearer <token>`
+#### Example:
+```
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjczMTAyMTM2LCJpYXQiOjE2NzMwMTU3MzYsImp0aSI6IjMyYWU3MDA1MTQ5NTRmYTViMmNhMDM4NDhlZTE3NDkwIiwidXNlcl9pZCI6MX0.oVh2i1-kx03gKcMmModO9fBYkIZY9S7aDfEPGZCxPDo
+```
