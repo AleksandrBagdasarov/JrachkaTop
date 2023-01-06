@@ -1,19 +1,10 @@
 [
   {
     "model": "api.printer",
-    "pk": 0,
-    "fields": {
-      "api_key": "",
-      "check_type": "client",
-      "point_id": 0
-    }
-  },
-  {
-    "model": "api.printer",
     "pk": 1,
     "fields": {
       "api_key": "",
-      "check_type": "kitchen",
+      "check_type": "client",
       "point_id": 0
     }
   }
