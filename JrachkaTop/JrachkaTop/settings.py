@@ -21,6 +21,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "postgres")
 REDIS_REQUIREPASS = os.getenv("REDIS_REQUIREPASS", "redis")
+WKHTMLTOPDF_URL = os.getenv(
+    "WKHTMLTOPDF_URL", "http://localhost:5000/"
+)  # my port 80 was busy
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -155,12 +158,12 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Rest Framework settings
-
 AUTH_USER_MODEL = "api.user"
+
+# Rest Framework settings
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
 }
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [

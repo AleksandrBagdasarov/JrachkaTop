@@ -5,6 +5,26 @@
     <title>Check</title>
 </head>
 <body>
-{{my_dict.foo}}
+<h1>JrachkaTop</h1>
+<h3>Check Type: {{ type }}</h3>
+<h3>User: {{ user_id }}</h3>
+<h3>Point: {{ point_id }}</h3>
+<h3>Order: {{ order_id }}</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{item.name}}</td>
+            <td>{{item.quantity}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 </body>
 </html>

@@ -1,8 +1,6 @@
-import base64
 import json
 import logging
 
-import requests
 from api.actions.order.serializers import (CreateOrderSerializer,
                                            ShowOrderSerializer)
 from api.models import Check, Order, Printer, User
@@ -55,11 +53,13 @@ class CreateOrderView(generics.GenericAPIView):
         }
     )
     def post(self, request, *args, **kwargs):
+        # я не зовсім зрозумів в який момент замість друку треба повертати інформацю про замовлення
+        # так як для подібноі операціі в житті був би колбєк від системи оплати, якщо кліент оплатив то робимо роботу
+        # а тут просто працюе блок одного і того ж самого замовлення він одного і того ж самого юзера за період в кілька секунд
+
         if user_same_request(request):
             order = get_last_order(request.user)
             return Response(order, status=status.HTTP_409_CONFLICT)
-
-        render_template.delay()
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -81,12 +81,22 @@ class CreateOrderView(generics.GenericAPIView):
         order.save()
 
         for printer in printers:
-            Check.objects.create(
+            check = Check.objects.create(
                 printer=printer,
                 order=order,
                 type=printer.check_type,
                 status=Check.STATUSES.NEW,
             )
+            context = {
+                "type": check.type,
+                "check_id": check.id,
+                "user_id": check.order.user.id,
+                "point_id": printer.point_id,
+                "order_id": check.order.id,
+                "items": [dict(x) for x in check.order.items],
+            }
+            # Add Task to Celery
+            render_template.delay(context)
 
         order_serializer = ShowOrderSerializer(order)
 
