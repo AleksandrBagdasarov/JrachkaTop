@@ -6,30 +6,13 @@ import requests
 from api.actions.order.serializers import (CreateOrderSerializer,
                                            ShowOrderSerializer)
 from api.models import Check, Order, Printer, User
-from api.utils.cache import cache
-from django.template.loader import render_to_string
+from api.tasks import render_template
+from api.utils import cache
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
 LOGGER = logging.getLogger("root")
-
-
-def render_template():
-    rendered = render_to_string("check.html", {"foo": "bar"})
-    data_bytes = rendered.encode("ascii")
-    base64_bytes = base64.b64encode(data_bytes)
-    base64_data = base64_bytes.decode("ascii")
-    headers = {
-        "Content-Type": "application/json",
-    }
-    url = "http://localhost:5000/"
-    response = requests.post(
-        url, data=json.dumps(base64_data), headers=headers
-    )
-    with open("123.pdf", "wb") as f:
-        f.write(response.content)
-    return rendered
 
 
 def user_same_request(request):
@@ -76,7 +59,7 @@ class CreateOrderView(generics.GenericAPIView):
             order = get_last_order(request.user)
             return Response(order, status=status.HTTP_409_CONFLICT)
 
-        render_template()
+        render_template.delay()
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

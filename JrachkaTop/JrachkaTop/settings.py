@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "rest_framework",
     "django_apscheduler",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -173,8 +174,24 @@ REST_FRAMEWORK = {
     ),
 }
 
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+#         'LOCATION': 'my_cache_table',
+#     }
+# }
 SWAGGER_SETTINGS = {
     "SECURITY_DEFINITIONS": {
         "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"},
     }
 }
+
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
+# CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+# CELERY_RESULT_BACKEND = 'django-db'
+# CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"

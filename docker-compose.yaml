@@ -13,12 +13,23 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
+  celery:
+    container_name: celery
+    network_mode: host
+    build:
+      context: .
+      dockerfile: ./.Dockerfile
+    command: sh -c "cd JrachkaTop && python -m celery -A JrachkaTop worker"
+    depends_on:
+      - redis
+      - db
+
   redis:
     container_name: redis
     network_mode: host
     restart: always
     image: redis:6.2-alpine
-    command: redis-server --loglevel warning --requirepass ${REDIS_REQUIREPASS}
+    command: redis-server --loglevel warning
 
   wkhtmltopdf:
     container_name: wkhtmltopdf
