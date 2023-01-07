@@ -6,8 +6,9 @@ from api.actions.order.serializers import (CreateOrderSerializer,
 from api.models import Check, Order, Printer, User
 from api.tasks import render_template
 from api.utils import cache
+from django.db.models import Max
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, views
 from rest_framework.response import Response
 
 LOGGER = logging.getLogger("root")
@@ -25,7 +26,9 @@ def user_same_request(request):
 
 
 def get_last_order(user):
-    orders = Order.objects.filter(user=user).order_by("-id")[:1]
+    orders = Order.objects.filter(
+        user=user, id=Order.objects.aggregate(Max("id"))["id__max"]
+    )
     if not orders:
         return {}
 
@@ -42,7 +45,8 @@ def get_orders(user: User) -> list:
 
 
 class CreateOrderView(generics.GenericAPIView):
-
+    # class CreateOrderView(views.APIView):
+    queryset = Order.objects.all()
     serializer_class = CreateOrderSerializer
     permission_classes = [permissions.IsAuthenticated]
 
