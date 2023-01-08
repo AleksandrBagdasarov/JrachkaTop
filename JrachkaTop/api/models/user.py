@@ -22,12 +22,14 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_staff", True)
 
         return self._create_user(email, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=100, unique=True)
+    is_staff = models.BooleanField(default=True)
     USERNAME_FIELD = "email"
 
     objects = UserManager()
