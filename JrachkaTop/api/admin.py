@@ -10,13 +10,14 @@ class CheckPrinterFilter(admin.SimpleListFilter):
     parameter_name = "Printer"
 
     def lookups(self, request, model_admin):
-        return (("1", _("1")), ("2", _("2")))
+        printer_ids = Printer.objects.values_list("id", flat=True)
+        return [(x, x) for x in printer_ids]
 
     def queryset(self, request, queryset):
-        if self.value() == "1":
-            return queryset.filter(printer_id=1)
-        elif self.value() == "2":
-            return queryset.filter(printer_id=2)
+        if self.value():
+            return queryset.filter(printer_id=self.value())
+        else:
+            return queryset
 
 
 class CheckAdmin(admin.ModelAdmin):
